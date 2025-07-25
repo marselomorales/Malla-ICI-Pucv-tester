@@ -1,0 +1,710 @@
+:root {
+      --bg-light: #eaf1f8;
+      --bg-dark: #1e1e1e;
+      --icon-color-light: #ffc107;
+      --icon-color-dark: #90caf9;
+      --programacion: #4a86e8;
+      --matematicas: #e06666;
+      --fisica: #6aa84f;
+      --ingenieria: #8e7cc3;
+      --humanidades: #f6b26b;
+      --optativos: #d5a6bd;
+      --fofu: #40E0D0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+      margin: 0;
+      transition: background-color 0.5s ease, color 0.5s ease;
+      background-color: var(--bg-light);
+      color: #111;
+      min-height: 100vh;
+    }
+
+    body.active {
+      background-color: var(--bg-dark);
+      color: #eee;
+    }
+
+    body.active .aprobado {
+      background: #2e7d32;
+      color: #fff;
+    }
+
+    body.active .disponible {
+      background: #fbc02d;
+      color: #000;
+    }
+
+    body.active .bloqueado {
+      background: #555;
+      color: #aaa;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 0 10px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .progress-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 800px;
+      padding: 0 10px;
+    }
+
+    .stat-item {
+      text-align: center;
+      background: rgba(0, 0, 0, 0.05);
+      padding: 8px 15px;
+      border-radius: 8px;
+      font-weight: 500;
+      min-width: 120px;
+    }
+
+    body.active .stat-item {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .legend {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 20px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      margin: 0 5px;
+    }
+
+    .legend .cuadro {
+      width: 14px;
+      height: 14px;
+      display: inline-block;
+      border-radius: 3px;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    .progress {
+      margin: 0 auto;
+      width: 100%;
+      max-width: 800px;
+      background-color: #cfd8dc;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 20px;
+      box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.15);
+      position: relative;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #4caf50, #8bc34a);
+      width: 0%;
+      transition: width 0.5s ease-in-out;
+      position: relative;
+    }
+
+    .progress-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 12px;
+      font-weight: bold;
+      color: #000;
+      text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+      pointer-events: none;
+    }
+
+    body.active .progress-text {
+      color: #fff;
+      text-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .controls button {
+      padding: 8px 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 500;
+    }
+
+    .controls button:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .controls button:active {
+      background-color: #2ecc71;
+      transform: translateY(0);
+    }
+
+    .controls button.active {
+      background-color: #2ecc71;
+    }
+
+    .search-container {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto 20px;
+      position: relative;
+    }
+
+    .search-container input {
+      width: 100%;
+      padding: 10px 15px;
+      border-radius: 30px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      padding-left: 40px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    body.active .search-container input {
+      background-color: #2a2a2a;
+      border-color: #444;
+      color: #eee;
+    }
+
+    .search-container ion-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #777;
+    }
+
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      padding-bottom: 20px;
+    }
+
+    .semestre {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      min-width: 240px;
+      max-width: 300px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      flex: 1 1 240px;
+      transition: transform 0.3s ease;
+    }
+
+    body.active .semestre {
+      background: #2a2a2a;
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+    }
+
+    .semestre h3 {
+      text-align: center;
+      color: #34495e;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #eee;
+    }
+
+    body.active .semestre h3 {
+      color: #90caf9;
+      border-bottom: 2px solid #444;
+    }
+
+    .ramo {
+      margin: 6px 0;
+      padding: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border-left: 4px solid transparent;
+    }
+
+    .ramo[data-area="programacion"] {
+      border-left-color: var(--programacion);
+    }
+    
+    .ramo[data-area="matematicas"] {
+      border-left-color: var(--matematicas);
+    }
+    
+    .ramo[data-area="fisica"] {
+      border-left-color: var(--fisica);
+    }
+    
+    .ramo[data-area="ingenieria"] {
+      border-left-color: var(--ingenieria);
+    }
+    
+    .ramo[data-area="humanidades"] {
+      border-left-color: var(--humanidades);
+    }
+    
+    .ramo[data-area="optativos"] {
+      border-left-color: var(--optativos);
+    } 
+    
+    .ramo[data-area="fofu"] {
+      border-left-color: var(--fofu);
+    }
+
+    
+    .ramo:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .ramo:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0.95;
+      pointer-events: none;
+      z-index: 10;
+      max-width: 300px;
+      text-align: center;
+    }
+
+    .bloqueado {
+      background: #ccc;
+      color: #666;
+      cursor: not-allowed;
+    }
+
+    .disponible {
+      background: #ffe08a;
+    }
+
+    .aprobado {
+      background: #98fb98;
+    }
+
+    .creditos {
+      font-size: 11px;
+      font-weight: bold;
+      margin-top: 5px;
+      opacity: 0.8;
+    }
+
+    .desbloqueado {
+      animation: fadeInScale 0.8s ease forwards;
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .area-filter {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .area-btn {
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: none;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      opacity: 0.7;
+    }
+
+    .area-btn.active {
+      opacity: 1;
+      transform: scale(1.05);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .area-btn[data-area="programacion"] {
+      background-color: var(--programacion);
+      color: white;
+    }
+    
+    .area-btn[data-area="matematicas"] {
+      background-color: var(--matematicas);
+      color: white;
+    }
+    
+    .area-btn[data-area="fisica"] {
+      background-color: var(--fisica);
+      color: white;
+    }
+    
+    .area-btn[data-area="ingenieria"] {
+      background-color: var(--ingenieria);
+      color: white;
+    }
+    
+    .area-btn[data-area="humanidades"] {
+      background-color: var(--humanidades);
+      color: #333;
+    }
+    
+    .area-btn[data-area="optativos"] {
+      background-color: var(--optativos);
+      color: #333;
+    }
+
+   .area-btn[data-area="fofu"] {
+   background-color: var(--fofu);
+   color: #111;
+   }
+
+    @media (max-width: 768px) {
+      .grid {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .semestre {
+        width: 100%;
+        max-width: 100%;
+      }
+      
+      header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .controls {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .controls button {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+    }
+
+    .dark-mode {
+      position: static;
+      float: right;
+      margin: 0;
+      width: 60px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      border-radius: 999px;
+      background-color: #dfdede;
+      cursor: pointer;
+      transition: background-color 0.5s ease;
+      z-index: auto;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      user-select: none;
+    }
+
+    body.active .dark-mode {
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.4);
+      background-color: white;
+    }
+
+    .dark-mode .circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background-color: white;
+      transform: translateX(5%);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.5s ease, background-color 0.5s ease;
+    }
+
+    body.active .circle {
+      transform: translateX(30px);
+      background-color: #2a2a2c;
+    }
+
+    .dark-mode .circle ion-icon {
+      width: 24px;
+      height: 24px;
+      position: absolute;
+      transition: transform 0.5s ease;
+    }
+
+    .dark-mode .circle .moon {
+      color: white;
+      transform: translateY(-120%);
+    }
+
+    body.active .circle .moon {
+      transform: translateY(0);
+    }
+
+    .dark-mode .circle .sun {
+      color: #fcde5b;
+    }
+
+    body.active .circle .sun {
+      transform: translateY(120%);
+    }
+    
+    .no-results {
+      text-align: center;
+      padding: 20px;
+      font-style: italic;
+      color: #777;
+      grid-column: 1 / -1;
+    }
+
+    .ramo {
+      padding: 12px 10px !important;
+      min-height: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .ramo-nombre {
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    
+    .ramo-detalles {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+    
+    .ramo-sigla {
+      opacity: 0.8;
+    }
+    
+    .ramo-creditos {
+      font-weight: bold;
+    }
+
+    
+}
+
+
+  
+.retirado {
+  animation: fadeOutScale 0.4s ease forwards;
+  opacity: 1;
+  transform: scale(1);
+}
+
+@keyframes fadeOutScale {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.footer {
+  text-align: center;
+  padding: 20px 0;
+  margin-top: 30px;
+  font-size: 14px;
+  color: #666;
+  border-top: 1px solid #eee;
+  transition: border-color 0.3s, color 0.3s;
+}
+
+body.active .footer {
+  color: #aaa;
+  border-top: 1px solid #444;
+}
+
+.footer a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+body.active .footer a {
+  color: #90caf9;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+/* Móviles - Media Query */
+@media (max-width: 768px) {
+  /* Header reorganizado */
+  header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .dark-mode {
+    align-self: center;
+    margin-top: 10px;
+  }
+
+  /* Estadísticas en columna */
+  .stats {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .stat-item {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  /* Filtros desplazables */
+  .area-filter {
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 10px;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .search-container {
+    width: 95%;
+  }
+  
+  /* Semestres a pantalla completa */
+  .grid {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .semestre {
+    width: 100%;
+    max-width: 100%;
+    min-width: unset;
+  }
+  
+  /* Ramos optimizados */
+  .ramo {
+    min-height: 50px;
+    padding: 8px !important;
+  }
+  
+  .ramo-nombre {
+    font-size: 13px;
+  }
+  
+  .ramo-detalles {
+    font-size: 11px;
+  }
+  
+  /* Controles apilados */
+  .controls {
+    flex-direction: column;
+  }
+  
+  .controls button {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
+  
+  /* Tooltips móviles */
+  .ramo:hover::after {
+    display: none;
+  }
+  
+  .ramo {
+    position: relative;
+  }
+  
+  .ramo:active::after {
+    content: attr(data-tooltip);
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    transform: none;
+    z-index: 100;
+    white-space: normal;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    text-align: center;
+    pointer-events: none;
+  }
+}

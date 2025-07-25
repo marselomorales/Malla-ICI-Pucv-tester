@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malla Interactiva - Ing. Civil Informática</title>
+  <!-- Iconos desde CDN -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Malla Interactiva - Ing. Civil Informática</h1>
+      <div class="dark-mode" id="theme-toggle">
+        <div class="circle">
+          <ion-icon class="sun" name="sunny"></ion-icon>
+          <ion-icon class="moon" name="moon"></ion-icon>
+        </div>
+      </div>
+    </header>
+
+    <!-- Progreso del avance de ramos -->
+    <div class="progress-container">
+      <div class="stats">
+        <div class="stat-item" id="total-ramos">Total ramos: 0</div>
+        <div class="stat-item" id="aprobados-ramos">Aprobados: 0</div>
+        <div class="stat-item" id="creditos-total">Créditos: 0/0</div>
+        <div class="stat-item" id="porcentaje">Progreso: 0%</div>
+      </div>
+      <div class="progress">
+        <div class="progress-bar" id="barraProgreso">
+          <div class="progress-text" id="textoProgreso">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leyenda de estados -->
+    <div class="legend">
+      <span><span class="cuadro" style="background:#98fb98;"></span> Aprobado</span>
+      <span><span class="cuadro" style="background:#ffe08a;"></span> Disponible</span>
+      <span><span class="cuadro" style="background:#ccc;"></span> Bloqueado</span>
+    </div>
+
+    <!-- Filtros por área -->
+    <div class="area-filter" id="area-filter">
+      <button class="area-btn" data-area="all">Todas</button>
+      <button class="area-btn" data-area="programacion">Programación</button>
+      <button class="area-btn" data-area="matematicas">Matemáticas</button>
+      <button class="area-btn" data-area="fisica">Física</button>
+      <button class="area-btn" data-area="ingenieria">Ingeniería</button>
+      <button class="area-btn" data-area="humanidades">Humanidades</button>
+      <button class="area-btn" data-area="optativos">Optativos</button>
+      <button class="area-btn" data-area="fofu">Fofus</button>
+    </div>
+
+    <!-- Buscador -->
+    <div class="search-container">
+      <ion-icon name="search-outline"></ion-icon>
+      <input type="text" id="search-input" placeholder="Buscar por nombre o sigla...">
+    </div>
+
+    <!-- Controles de interacción -->
+    <div class="controls">
+      <button onclick="resetear()">
+        <ion-icon name="refresh-outline"></ion-icon>
+        Reiniciar Progreso
+      </button>
+      <button id="toggle-disponibles">
+        <ion-icon name="eye-outline"></ion-icon>
+        Solo Disponibles
+      </button>
+    </div>
+
+    <!-- Contenedor de la malla -->
+    <div class="grid" id="malla"></div>
+  </div>
+
+  <!-- Pie de página -->
+  <div class="footer">
+    Desarrollado por Marcelo Morales (<a href="https://www.instagram.com/controlnotas" target="_blank">@controlnotas</a>)
+  </div>
+
+  <script src="main.js"></script>
+
+</body>
+</html>
