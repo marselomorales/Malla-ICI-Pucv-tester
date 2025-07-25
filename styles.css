@@ -606,105 +606,70 @@ body.active .footer a {
   text-decoration: underline;
 }
 
-/* Móviles - Media Query */
+/* ===== ESTILOS PARA MÓVILES (menos de 768px) ===== */
 @media (max-width: 768px) {
-  /* Header reorganizado */
+  /* 1. Header: título y botón de modo oscuro en columna */
   header {
     flex-direction: column;
-    gap: 10px;
-    text-align: center;
-  }
-  
-  .dark-mode {
-    align-self: center;
-    margin-top: 10px;
+    align-items: center;
+    gap: 15px;
   }
 
-  /* Estadísticas en columna */
+  /* 2. Estadísticas (ramos aprobados, créditos, etc.) en columna */
   .stats {
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
   }
-  
-  .stat-item {
-    width: 100%;
-    max-width: 300px;
-  }
-  
-  /* Filtros desplazables */
+
+  /* 3. Filtros de áreas (Programación, Matemáticas, etc.) con scroll horizontal */
   .area-filter {
+    flex-wrap: nowrap;
     overflow-x: auto;
     justify-content: flex-start;
     padding-bottom: 10px;
-    -webkit-overflow-scrolling: touch;
+    -webkit-overflow-scrolling: touch; /* Suaviza el scroll en iOS */
   }
-  
-  .search-container {
-    width: 95%;
-  }
-  
-  /* Semestres a pantalla completa */
-  .grid {
-    flex-direction: column;
-    align-items: center;
-  }
-  
+
+  /* 4. Semestres ocupan todo el ancho */
   .semestre {
     width: 100%;
     max-width: 100%;
-    min-width: unset;
   }
-  
-  /* Ramos optimizados */
-  .ramo {
-    min-height: 50px;
-    padding: 8px !important;
-  }
-  
+
+  /* 5. Texto más compacto en los ramos */
   .ramo-nombre {
-    font-size: 13px;
+    font-size: 14px;
   }
-  
-  .ramo-detalles {
-    font-size: 11px;
-  }
-  
-  /* Controles apilados */
+
+  /* 6. Botones de control en columna */
   .controls {
     flex-direction: column;
+    align-items: center;
   }
-  
+
   .controls button {
     width: 100%;
-    max-width: 300px;
-    justify-content: center;
   }
-  
-  /* Tooltips móviles */
+
+  /* 7. Tooltips adaptados a tactil (aparecen al tocar, no al hover) */
   .ramo:hover::after {
-    display: none;
+    display: none; /* Oculta el tooltip tradicional */
   }
-  
-  .ramo {
-    position: relative;
-  }
-  
+
   .ramo:active::after {
     content: attr(data-tooltip);
     position: fixed;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-    transform: none;
-    z-index: 100;
-    white-space: normal;
-    background: rgba(0, 0, 0, 0.85);
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.9);
     color: white;
-    padding: 10px;
+    padding: 12px;
     border-radius: 8px;
     font-size: 14px;
     text-align: center;
-    pointer-events: none;
+    z-index: 100;
+    white-space: normal;
   }
 }
