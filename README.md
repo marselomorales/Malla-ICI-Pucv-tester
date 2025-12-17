@@ -11,3 +11,8 @@ una malla curricular con prerrequisitos y estados.
 
 ## Objetivo actual
 Mejorar mantenibilidad y extensibilidad sin romper funcionalidad.
+
+
+##Acalaración
+Este proyecto actualmente funciona en un único archivo HTML.
+La separación en CSS/JS se realizará posteriormente sin alterar comportamiento.
