@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Ingeniería Civil en Informática</title>
+
+  <!-- Iconos desde CDN -->
+  
+  
+
+  <!-- Fuentes de Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-content">
+        <h1>Ingeniería Civil en Informática</h1>
+        <div class="subtitle">Malla interactiva y seguimiento de tu progreso académico</div>
+      </div>
+      <div class="dark-mode" id="theme-toggle" aria-label="Cambiar tema" role="switch" aria-checked="false" tabindex="0">
+        <div class="circle">
+          <ion-icon class="sun" name="sunny"></ion-icon>
+          <ion-icon class="moon" name="moon"></ion-icon>
+        </div>
+      </div>
+    </header>
+
+    <!-- NUEVO: Selector de Semestre Actual -->
+    <div class="semestre-selector-container">
+      <span class="semestre-selector-label">📅 Semestre actual:</span>
+      <select class="semestre-selector" id="select-semestre">
+        <option value="1">1° Semestre</option>
+        <option value="2">2° Semestre</option>
+        <option value="3">3° Semestre</option>
+        <option value="4">4° Semestre</option>
+        <option value="5">5° Semestre</option>
+        <option value="6">6° Semestre</option>
+        <option value="7">7° Semestre</option>
+        <option value="8">8° Semestre</option>
+        <option value="9">9° Semestre</option>
+        <option value="10">10° Semestre</option>
+        <option value="11">11° Semestre</option>
+      </select>
+      <span class="semestre-info">Basado en tu progreso real</span>
+    </div>
+
+    <!-- Panel de Análisis de Atraso -->
+    <div class="atraso-container" id="atraso-container" style="display: none;">
+      <div class="atraso-header">
+        <h3>📊 Análisis de Progreso Académico</h3>
+        <button class="btn btn-small" id="cerrar-analisis">
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+      </div>
+      
+      <div class="metricas-atraso">
+        <div class="metrica-item">
+          <div class="metrica-valor" id="metrica-atraso">0</div>
+          <div class="metrica-label">Semestres de atraso</div>
+        </div>
+        <div class="metrica-item">
+          <div class="metrica-valor" id="metrica-deficit">0</div>
+          <div class="metrica-label">Créditos en déficit</div>
+        </div>
+        <div class="metrica-item">
+          <div class="metrica-valor" id="metrica-criticos">0</div>
+          <div class="metrica-label">Ramos críticos</div>
+        </div>
+      </div>
+
+      <div class="recomendaciones-container" id="recomendaciones-list">
+        <!-- Las recomendaciones se insertarán aquí -->
+      </div>
+    </div>
+
+    <div class="progress-container" aria-live="polite">
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-value" id="total-ramos">0</div>
+          <div class="stat-label">Total ramos</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="aprobados-ramos">0</div>
+          <div class="stat-label">Aprobados</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="creditos-total">0/0</div>
+          <div class="stat-label">Créditos</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="porcentaje">0%</div>
+          <div class="stat-label">Progreso</div>
+        </div>
+      </div>
+      <div class="progress" aria-label="Progreso total">
+        <div class="progress-bar" id="barraProgreso">
+          <div class="progress-text" id="textoProgreso">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span><span class="cuadro lg-aprob"></span> Aprobado</span>
+      <span><span class="cuadro lg-disp"></span> Disponible</span>
+      <span><span class="cuadro lg-bloq"></span> Bloqueado</span>
+    </div>
+
+    <div class="area-filter" role="group" aria-label="Filtrar por área">
+      <button class="area-btn" data-area="all">Todos</button>
+      <button class="area-btn" data-area="programacion">Programación</button>
+      <button class="area-btn" data-area="matematicas">Matemáticas</button>
+      <button class="area-btn" data-area="fisica">Física</button>
+      <button class="area-btn" data-area="ingenieria">Ingeniería</button>
+      <button class="area-btn" data-area="humanidades">Humanidades</button>
+      <button class="area-btn" data-area="fofus">Fofus</button>
+      <button class="area-btn" data-area="optativos">Optativos</button>
+    </div>
+
+    <div class="controls-container">
+      <div class="controls">
+        <button class="btn" id="btn-reset"><ion-icon name="refresh-outline"></ion-icon> Reiniciar</button>
+        <button class="btn" id="toggle-disponibles"><ion-icon name="eye-outline"></ion-icon> Disponibles</button>
+        <button class="btn" id="export-data"><ion-icon name="download-outline"></ion-icon> Exportar</button>
+        <button class="btn" id="btn-analisis-atraso">
+          <ion-icon name="analytics-outline"></ion-icon> Análisis de Atraso
+        </button>
+      </div>
+      <div class="search-container">
+        <ion-icon name="search-outline"></ion-icon>
+        <input type="text" id="search-input" placeholder="Buscar por nombre o sigla…" aria-label="Buscar ramos">
+      </div>
+    </div>
+
+    <div class="grid" id="malla" role="list"></div>
+  </div>
+
+  <div class="footer">
+    Desarrollado por <a href="https://www.instagram.com/chelo_.morales" target="_blank" rel="noopener">Marcelo Morales</a>
+  </div>
+
+  <!-- Tooltip touch -->
+  <div id="touch-tip" role="status" aria-live="polite"></div>
+
+  <!-- Toasts -->
+  <div id="toast-container"></div>
+
+
+<script src="app.js" defer></script>
+</body>
+</html>
