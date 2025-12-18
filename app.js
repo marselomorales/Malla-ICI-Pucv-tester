@@ -1,4 +1,14 @@
+// app.js: núcleo de la aplicación interactiva de malla curricular.
 // ========= MODULARIZACIÓN: Separación de responsabilidades =========
+
+// Constantes compartidas
+const STORAGE_KEYS = {
+  tema: 'modo',
+  atrasoConfig: 'config_atraso',
+  semestreActual: 'semestre_actual',
+  ramosAprobados: 'ramos_aprobados_siglas',
+  firmaMalla: 'firma_malla'
+};
 
 // Módulo de utilidades
 const Utils = {
@@ -35,7 +45,7 @@ const ThemeManager = {
   init() {
     this.toggle = document.getElementById('theme-toggle');
     this.body = document.body;
-    this.applyTheme(localStorage.getItem('modo') || 'light');
+    this.applyTheme(localStorage.getItem(STORAGE_KEYS.tema) || 'light');
     this.setupEventListeners();
   },
   
@@ -51,7 +61,7 @@ const ThemeManager = {
   swapTheme() {
     const isDark = this.body.classList.toggle('active');
     const modo = isDark ? 'dark' : 'light';
-    localStorage.setItem('modo', modo);
+    localStorage.setItem(STORAGE_KEYS.tema, modo);
     this.toggle?.setAttribute('aria-checked', isDark ? 'true' : 'false');
   },
   
@@ -275,7 +285,7 @@ const AtrasoAnalyzer = {
   },
 
   init() {
-    this.config = { ...this.config, ...JSON.parse(localStorage.getItem('config_atraso') || '{}') };
+    this.config = { ...this.config, ...JSON.parse(localStorage.getItem(STORAGE_KEYS.atrasoConfig) || '{}') };
   },
 
   // NUEVO: Obtener semestre actual del usuario
@@ -653,7 +663,7 @@ const MallaApp = {
   
   // NUEVO: Cargar semestre actual
   loadSemestreActual() {
-    const semestreGuardado = localStorage.getItem('semestre_actual');
+    const semestreGuardado = localStorage.getItem(STORAGE_KEYS.semestreActual);
     if (semestreGuardado) {
       this.state.semestreActual = parseInt(semestreGuardado);
       // Actualizar el selector en la UI
@@ -667,7 +677,7 @@ const MallaApp = {
   // NUEVO: Guardar semestre actual
   guardarSemestreActual(semestre) {
     this.state.semestreActual = parseInt(semestre);
-    localStorage.setItem('semestre_actual', semestre);
+    localStorage.setItem(STORAGE_KEYS.semestreActual, semestre);
     // Recalcular análisis si está visible
     if (document.getElementById('atraso-container').style.display !== 'none') {
       this.mostrarAnalisisAtraso();
@@ -677,24 +687,24 @@ const MallaApp = {
   // Configuración de persistencia
   setupPersistence() {
     const firmaMalla = JSON.stringify(CurriculumData.cursosRaw.map(c => c.sigla).sort());
-    const firmaGuardada = localStorage.getItem('firma_malla');
-    
+    const firmaGuardada = localStorage.getItem(STORAGE_KEYS.firmaMalla);
+
     // Si la malla ha cambiado, limpiar datos guardados
     if (firmaGuardada && firmaGuardada !== firmaMalla) {
-      localStorage.removeItem('ramos_aprobados_siglas');
+      localStorage.removeItem(STORAGE_KEYS.ramosAprobados);
     }
-    
-    localStorage.setItem('firma_malla', firmaMalla);
+
+    localStorage.setItem(STORAGE_KEYS.firmaMalla, firmaMalla);
   },
   
   // Cargar cursos aprobados
   loadApprovedCourses() {
-    this.state.aprobadasSiglas = JSON.parse(localStorage.getItem('ramos_aprobados_siglas') || '[]');
+    this.state.aprobadasSiglas = JSON.parse(localStorage.getItem(STORAGE_KEYS.ramosAprobados) || '[]');
     const setSiglasValidas = new Set(CurriculumData.cursosRaw.map(c => c.sigla));
-    
+
     // Filtrar solo siglas válidas
     this.state.aprobadasSiglas = this.state.aprobadasSiglas.filter(s => setSiglasValidas.has(s));
-    localStorage.setItem('ramos_aprobados_siglas', JSON.stringify(this.state.aprobadasSiglas));
+    localStorage.setItem(STORAGE_KEYS.ramosAprobados, JSON.stringify(this.state.aprobadasSiglas));
   },
   
   // Obtener nombres de cursos aprobados
@@ -763,10 +773,10 @@ const MallaApp = {
         const n = el.querySelector('.ramo-nombre')?.textContent;
         if (n && aEliminar.includes(n)) el.classList.add('retirado');
       });
-      
+
       const depSiglas = aEliminar.map(n => CurriculumData.ramos[n]?.sigla).filter(Boolean);
       this.state.aprobadasSiglas = this.state.aprobadasSiglas.filter(s => !depSiglas.includes(s));
-      localStorage.setItem('ramos_aprobados_siglas', JSON.stringify(this.state.aprobadasSiglas));
+      localStorage.setItem(STORAGE_KEYS.ramosAprobados, JSON.stringify(this.state.aprobadasSiglas));
       
       this.render();
       NotificationManager.showToast(`Has desaprobado ${ramoNombre} y sus dependencias`, 'info');
@@ -776,7 +786,7 @@ const MallaApp = {
         if (!this.state.aprobadasSiglas.includes(sigla)) {
           this.state.aprobadasSiglas.push(sigla);
         }
-        localStorage.setItem('ramos_aprobados_siglas', JSON.stringify(this.state.aprobadasSiglas));
+        localStorage.setItem(STORAGE_KEYS.ramosAprobados, JSON.stringify(this.state.aprobadasSiglas));
         
         this.render();
         NotificationManager.showToast(`¡Felicidades! Has aprobado ${ramoNombre}`, 'success');
@@ -790,8 +800,8 @@ const MallaApp = {
   // Reiniciar progreso
   resetProgress() {
     if (confirm('¿Estás seguro de reiniciar todo el progreso?')) {
-      localStorage.removeItem('ramos_aprobados_siglas');
-      localStorage.removeItem('semestre_actual');
+      localStorage.removeItem(STORAGE_KEYS.ramosAprobados);
+      localStorage.removeItem(STORAGE_KEYS.semestreActual);
       this.state.aprobadasSiglas = [];
       this.state.semestreActual = 1;
       const selector = document.getElementById('select-semestre');
