@@ -21,10 +21,39 @@
         <h1>Ingeniería Civil en Informática</h1>
         <div class="subtitle">Malla interactiva y seguimiento de tu progreso académico</div>
       </div>
-      <div class="dark-mode" id="theme-toggle" aria-label="Cambiar tema" role="switch" aria-checked="false" tabindex="0">
-        <div class="circle">
-          <ion-icon class="sun" name="sunny"></ion-icon>
-          <ion-icon class="moon" name="moon"></ion-icon>
+      <div class="header-actions">
+        <div class="theme-settings" aria-label="Preferencias de tema">
+          <div class="theme-toggle-wrapper">
+            <span class="theme-toggle-label" id="theme-mode-label">Modo claro</span>
+            <div class="dark-mode" id="theme-toggle" role="switch" aria-checked="false" tabindex="0">
+              <span class="sr-only">Cambiar entre modo claro y oscuro</span>
+              <div class="circle">
+                <ion-icon class="sun" name="sunny"></ion-icon>
+                <ion-icon class="moon" name="moon"></ion-icon>
+              </div>
+            </div>
+          </div>
+          <div class="theme-presets" role="group" aria-label="Paletas de color">
+            <span>Colores</span>
+            <div class="preset-list">
+              <button class="color-preset" type="button" data-color-preset="indigo" aria-label="Tema índigo" aria-pressed="false">
+                <span class="swatch-upper" style="background:#4f46e5"></span>
+                <span class="swatch-lower" style="background:#22c55e"></span>
+              </button>
+              <button class="color-preset" type="button" data-color-preset="emerald" aria-label="Tema esmeralda" aria-pressed="false">
+                <span class="swatch-upper" style="background:#047857"></span>
+                <span class="swatch-lower" style="background:#10b981"></span>
+              </button>
+              <button class="color-preset" type="button" data-color-preset="sunset" aria-label="Tema atardecer" aria-pressed="false">
+                <span class="swatch-upper" style="background:#f97316"></span>
+                <span class="swatch-lower" style="background:#f59e0b"></span>
+              </button>
+              <button class="color-preset" type="button" data-color-preset="ocean" aria-label="Tema océano" aria-pressed="false">
+                <span class="swatch-upper" style="background:#0ea5e9"></span>
+                <span class="swatch-lower" style="background:#14b8a6"></span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </header>

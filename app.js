@@ -4,6 +4,7 @@
 // Constantes compartidas
 const STORAGE_KEYS = {
   tema: 'modo',
+  colorPreset: 'tema_color',
   atrasoConfig: 'config_atraso',
   semestreActual: 'semestre_actual',
   ramosAprobados: 'ramos_aprobados_siglas',
@@ -42,29 +43,71 @@ const Utils = {
 
 // Módulo de tema
 const ThemeManager = {
+  presets: {
+    indigo: { label: 'Índigo', accent: '#4f46e5', accent2: '#22c55e', accentDark: '#3730a3', accentLight: '#e0e7ff' },
+    emerald: { label: 'Esmeralda', accent: '#047857', accent2: '#10b981', accentDark: '#065f46', accentLight: '#d1fae5' },
+    sunset: { label: 'Atardecer', accent: '#f97316', accent2: '#f59e0b', accentDark: '#c2410c', accentLight: '#ffedd5' },
+    ocean: { label: 'Océano', accent: '#0ea5e9', accent2: '#14b8a6', accentDark: '#0369a1', accentLight: '#dbeafe' }
+  },
+
   init() {
     this.toggle = document.getElementById('theme-toggle');
+    this.modeLabel = document.getElementById('theme-mode-label');
+    this.colorButtons = Utils.$$('.color-preset');
     this.body = document.body;
-    this.applyTheme(localStorage.getItem(STORAGE_KEYS.tema) || 'light');
+    const storedMode = localStorage.getItem(STORAGE_KEYS.tema);
+    const storedColor = localStorage.getItem(STORAGE_KEYS.colorPreset);
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    this.mode = storedMode || (prefersDark ? 'dark' : 'light');
+    this.color = this.presets[storedColor] ? storedColor : 'indigo';
+    this.applyTheme();
     this.setupEventListeners();
   },
-  
-  applyTheme(mode) {
-    if (mode === 'dark') {
-      this.body.classList.add('active');
-    } else {
-      this.body.classList.remove('active');
-    }
+
+  applyTheme() {
+    const mode = this.mode === 'dark' ? 'dark' : 'light';
+    const palette = this.presets[this.color] || this.presets.indigo;
+
+    this.body.dataset.theme = mode;
+    this.body.dataset.color = this.color;
+    this.body.classList.toggle('active', mode === 'dark');
     this.toggle?.setAttribute('aria-checked', mode === 'dark' ? 'true' : 'false');
+    document.documentElement.style.colorScheme = mode;
+
+    // Aplicar paleta a variables CSS
+    this.body.style.setProperty('--accent', palette.accent);
+    this.body.style.setProperty('--accent-2', palette.accent2);
+    this.body.style.setProperty('--accent-dark', palette.accentDark);
+    this.body.style.setProperty('--accent-light', palette.accentLight);
+
+    if (this.modeLabel) {
+      this.modeLabel.textContent = mode === 'dark' ? 'Modo oscuro' : 'Modo claro';
+    }
+    this.updatePresetButtons();
   },
-  
+
   swapTheme() {
     const isDark = this.body.classList.toggle('active');
-    const modo = isDark ? 'dark' : 'light';
-    localStorage.setItem(STORAGE_KEYS.tema, modo);
-    this.toggle?.setAttribute('aria-checked', isDark ? 'true' : 'false');
+    this.mode = isDark ? 'dark' : 'light';
+    localStorage.setItem(STORAGE_KEYS.tema, this.mode);
+    this.applyTheme();
   },
-  
+
+  setColorPreset(presetKey) {
+    if (!this.presets[presetKey]) return;
+    this.color = presetKey;
+    localStorage.setItem(STORAGE_KEYS.colorPreset, presetKey);
+    this.applyTheme();
+  },
+
+  updatePresetButtons() {
+    this.colorButtons.forEach(btn => {
+      const isActive = btn.dataset.colorPreset === this.color;
+      btn.classList.toggle('is-active', isActive);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+  },
+
   setupEventListeners() {
     this.toggle?.addEventListener('click', () => this.swapTheme());
     this.toggle?.addEventListener('keydown', (e) => {
@@ -72,6 +115,16 @@ const ThemeManager = {
         e.preventDefault();
         this.swapTheme();
       }
+    });
+
+    this.colorButtons.forEach(btn => {
+      btn.addEventListener('click', () => this.setColorPreset(btn.dataset.colorPreset));
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.setColorPreset(btn.dataset.colorPreset);
+        }
+      });
     });
   }
 };
