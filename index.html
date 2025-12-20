@@ -33,24 +33,33 @@
               </div>
             </div>
           </div>
-          <div class="theme-presets" role="group" aria-label="Paletas de color">
-            <span>Colores</span>
-            <div class="preset-list">
-              <button class="color-preset" type="button" data-color-preset="indigo" aria-label="Tema índigo" aria-pressed="false">
-                <span class="swatch-upper" style="background:#4f46e5"></span>
-                <span class="swatch-lower" style="background:#22c55e"></span>
+          <div class="theme-dropdown" id="theme-dropdown">
+            <button class="theme-dropdown-toggle" type="button" id="theme-dropdown-toggle" aria-haspopup="menu" aria-expanded="false" aria-controls="theme-dropdown-menu">
+              <ion-icon name="color-palette-outline" aria-hidden="true"></ion-icon>
+              <span class="theme-dropdown-text">Tema</span>
+              <span class="theme-dropdown-value" id="theme-current">Índigo</span>
+              <ion-icon class="chevron" name="chevron-down" aria-hidden="true"></ion-icon>
+            </button>
+            <div class="theme-dropdown-menu" id="theme-dropdown-menu" role="group" aria-label="Seleccionar tema">
+              <button class="theme-option" type="button" data-theme="indigo" aria-pressed="false">
+                <span class="theme-swatch" aria-hidden="true"></span>
+                <span class="theme-option-label">Índigo</span>
               </button>
-              <button class="color-preset" type="button" data-color-preset="emerald" aria-label="Tema esmeralda" aria-pressed="false">
-                <span class="swatch-upper" style="background:#047857"></span>
-                <span class="swatch-lower" style="background:#10b981"></span>
+              <button class="theme-option" type="button" data-theme="emerald" aria-pressed="false">
+                <span class="theme-swatch" aria-hidden="true"></span>
+                <span class="theme-option-label">Esmeralda</span>
               </button>
-              <button class="color-preset" type="button" data-color-preset="sunset" aria-label="Tema atardecer" aria-pressed="false">
-                <span class="swatch-upper" style="background:#f97316"></span>
-                <span class="swatch-lower" style="background:#f59e0b"></span>
+              <button class="theme-option" type="button" data-theme="sunset" aria-pressed="false">
+                <span class="theme-swatch" aria-hidden="true"></span>
+                <span class="theme-option-label">Atardecer</span>
               </button>
-              <button class="color-preset" type="button" data-color-preset="ocean" aria-label="Tema océano" aria-pressed="false">
-                <span class="swatch-upper" style="background:#0ea5e9"></span>
-                <span class="swatch-lower" style="background:#14b8a6"></span>
+              <button class="theme-option" type="button" data-theme="ocean" aria-pressed="false">
+                <span class="theme-swatch" aria-hidden="true"></span>
+                <span class="theme-option-label">Océano</span>
+              </button>
+              <button class="theme-option" type="button" data-theme="nocturnal" aria-pressed="false">
+                <span class="theme-swatch" aria-hidden="true"></span>
+                <span class="theme-option-label">Nocturnal</span>
               </button>
             </div>
           </div>
