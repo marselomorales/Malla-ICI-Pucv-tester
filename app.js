@@ -43,88 +43,156 @@ const Utils = {
 
 // Módulo de tema
 const ThemeManager = {
-  presets: {
-    indigo: { label: 'Índigo', accent: '#4f46e5', accent2: '#22c55e', accentDark: '#3730a3', accentLight: '#e0e7ff' },
-    emerald: { label: 'Esmeralda', accent: '#047857', accent2: '#10b981', accentDark: '#065f46', accentLight: '#d1fae5' },
-    sunset: { label: 'Atardecer', accent: '#f97316', accent2: '#f59e0b', accentDark: '#c2410c', accentLight: '#ffedd5' },
-    ocean: { label: 'Océano', accent: '#0ea5e9', accent2: '#14b8a6', accentDark: '#0369a1', accentLight: '#dbeafe' }
+  themes: {
+    indigo: 'Índigo',
+    emerald: 'Esmeralda',
+    sunset: 'Atardecer',
+    ocean: 'Océano',
+    nocturnal: 'Nocturnal'
   },
 
   init() {
+    this.root = document.documentElement;
     this.toggle = document.getElementById('theme-toggle');
     this.modeLabel = document.getElementById('theme-mode-label');
-    this.colorButtons = Utils.$$('.color-preset');
-    this.body = document.body;
-    const storedMode = localStorage.getItem(STORAGE_KEYS.tema);
-    const storedColor = localStorage.getItem(STORAGE_KEYS.colorPreset);
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    this.mode = storedMode || (prefersDark ? 'dark' : 'light');
-    this.color = this.presets[storedColor] ? storedColor : 'indigo';
+    this.dropdown = document.getElementById('theme-dropdown');
+    this.dropdownToggle = document.getElementById('theme-dropdown-toggle');
+    this.dropdownMenu = document.getElementById('theme-dropdown-menu');
+    this.themeOptions = Utils.$$('.theme-option');
+    this.currentThemeLabel = document.getElementById('theme-current');
+
+    this.loadPreferences();
     this.applyTheme();
     this.setupEventListeners();
   },
 
+  loadPreferences() {
+    const storedMode = localStorage.getItem(STORAGE_KEYS.tema);
+    const storedTheme = localStorage.getItem(STORAGE_KEYS.colorPreset);
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    this.mode = storedMode || (prefersDark ? 'dark' : 'light');
+    this.theme = this.themes[storedTheme] ? storedTheme : 'indigo';
+  },
+
+  savePreferences() {
+    localStorage.setItem(STORAGE_KEYS.tema, this.mode);
+    localStorage.setItem(STORAGE_KEYS.colorPreset, this.theme);
+  },
+
   applyTheme() {
     const mode = this.mode === 'dark' ? 'dark' : 'light';
-    const palette = this.presets[this.color] || this.presets.indigo;
+    this.root.dataset.mode = mode;
+    this.root.dataset.theme = this.theme;
 
-    this.body.dataset.theme = mode;
-    this.body.dataset.color = this.color;
-    this.body.classList.toggle('active', mode === 'dark');
     this.toggle?.setAttribute('aria-checked', mode === 'dark' ? 'true' : 'false');
-    document.documentElement.style.colorScheme = mode;
-
-    // Aplicar paleta a variables CSS
-    this.body.style.setProperty('--accent', palette.accent);
-    this.body.style.setProperty('--accent-2', palette.accent2);
-    this.body.style.setProperty('--accent-dark', palette.accentDark);
-    this.body.style.setProperty('--accent-light', palette.accentLight);
-
     if (this.modeLabel) {
       this.modeLabel.textContent = mode === 'dark' ? 'Modo oscuro' : 'Modo claro';
     }
-    this.updatePresetButtons();
+    if (this.currentThemeLabel) {
+      this.currentThemeLabel.textContent = this.themes[this.theme] || 'Tema';
+    }
+
+    this.updateThemeOptions();
   },
 
-  swapTheme() {
-    const isDark = this.body.classList.toggle('active');
-    this.mode = isDark ? 'dark' : 'light';
-    localStorage.setItem(STORAGE_KEYS.tema, this.mode);
+  setColorTheme(theme) {
+    if (!this.themes[theme]) return;
+    this.theme = theme;
     this.applyTheme();
+    this.savePreferences();
   },
 
-  setColorPreset(presetKey) {
-    if (!this.presets[presetKey]) return;
-    this.color = presetKey;
-    localStorage.setItem(STORAGE_KEYS.colorPreset, presetKey);
+  toggleDarkMode() {
+    this.mode = this.mode === 'dark' ? 'light' : 'dark';
     this.applyTheme();
+    this.savePreferences();
   },
 
-  updatePresetButtons() {
-    this.colorButtons.forEach(btn => {
-      const isActive = btn.dataset.colorPreset === this.color;
-      btn.classList.toggle('is-active', isActive);
-      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+  updateThemeOptions() {
+    this.themeOptions.forEach(option => {
+      const isActive = option.dataset.theme === this.theme;
+      option.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
+  },
+
+  isDropdownOpen() {
+    return this.dropdownToggle?.getAttribute('aria-expanded') === 'true';
+  },
+
+  setDropdownState(isOpen) {
+    this.dropdownToggle?.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    if (isOpen) {
+      this.focusActiveOption();
+    }
+  },
+
+  focusActiveOption() {
+    const activeOption = this.themeOptions.find(option => option.dataset.theme === this.theme);
+    (activeOption || this.themeOptions[0])?.focus();
   },
 
   setupEventListeners() {
-    this.toggle?.addEventListener('click', () => this.swapTheme());
-    this.toggle?.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        this.swapTheme();
+    this.toggle?.addEventListener('click', () => this.toggleDarkMode());
+    this.toggle?.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        this.toggleDarkMode();
       }
     });
 
-    this.colorButtons.forEach(btn => {
-      btn.addEventListener('click', () => this.setColorPreset(btn.dataset.colorPreset));
-      btn.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          this.setColorPreset(btn.dataset.colorPreset);
+    this.dropdownToggle?.addEventListener('click', () => {
+      this.setDropdownState(!this.isDropdownOpen());
+    });
+
+    this.dropdownToggle?.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        this.setDropdownState(!this.isDropdownOpen());
+      }
+      if (event.key === 'Escape') {
+        this.setDropdownState(false);
+      }
+    });
+
+    this.themeOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        this.setColorTheme(option.dataset.theme);
+        this.setDropdownState(false);
+        this.dropdownToggle?.focus();
+      });
+      option.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          this.setColorTheme(option.dataset.theme);
+          this.setDropdownState(false);
+          this.dropdownToggle?.focus();
+        }
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          this.setDropdownState(false);
+          this.dropdownToggle?.focus();
         }
       });
+    });
+
+    document.addEventListener('click', (event) => {
+      if (this.isDropdownOpen() && !this.dropdown?.contains(event.target)) {
+        this.setDropdownState(false);
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && this.isDropdownOpen()) {
+        this.setDropdownState(false);
+        this.dropdownToggle?.focus();
+      }
+    });
+
+    this.dropdown?.addEventListener('focusout', (event) => {
+      if (this.isDropdownOpen() && !this.dropdown.contains(event.relatedTarget)) {
+        this.setDropdownState(false);
+      }
     });
   }
 };
